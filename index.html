@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Donatelli Tavoli</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:#0D0A08;display:flex;align-items:center;justify-content:center;font-family:"DM Sans",sans-serif}
+.app{width:100%;max-width:430px;height:100vh;background:#141009;display:flex;flex-direction:column;overflow:hidden}
+@media(min-width:500px){.app{height:844px;border-radius:32px;box-shadow:0 40px 100px #000,0 0 0 1px rgba(160,50,30,.2)}}
+.hd{padding:44px 20px 14px;background:#0D0A08;flex-shrink:0;border-bottom:2px solid rgba(160,50,30,.3);box-shadow:0 4px 20px rgba(0,0,0,.4);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),repeating-linear-gradient(45deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 1px,transparent 1px,transparent 8px),repeating-linear-gradient(-45deg,rgba(255,255,255,.015) 0px,rgba(255,255,255,.015) 1px,transparent 1px,transparent 8px)}
+.hd-row{display:flex;align-items:flex-end;justify-content:space-between}
+.logo-d{font-family:"Cormorant Garamond",serif;font-size:36px;font-weight:300;color:#F0E8DC;line-height:1}
+.logo-s{font-size:8px;letter-spacing:.4em;color:rgba(240,232,220,.3);font-weight:700;text-transform:uppercase}
+.hd-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.hdate{font-size:11px;color:rgba(240,232,220,.3)}
+.adminbtn{padding:4px 10px;border:1px solid rgba(160,50,30,.3);border-radius:16px;background:transparent;cursor:pointer;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(240,232,220,.3);transition:all .2s}
+.adminbtn.on{background:#8B1A1A;border-color:#A03020;color:#F0E8DC;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E")}
+.dn{display:flex;align-items:center;gap:8px;padding:10px 20px;background:#0D0A08;flex-shrink:0}
+.arw{width:28px;height:28px;border:1px solid rgba(160,50,30,.25);border-radius:7px;background:transparent;cursor:pointer;color:rgba(240,232,220,.45);font-size:16px;display:flex;align-items:center;justify-content:center}
+.arw:hover{border-color:#8B1A1A;color:#F0E8DC}
+.dlbl{flex:1;text-align:center;font-size:12px;color:rgba(240,232,220,.7);font-weight:500;background:transparent;border:none;cursor:pointer}
+.tbtn{padding:0 11px;height:28px;border:1px solid rgba(160,50,30,.25);border-radius:7px;background:transparent;cursor:pointer;font-size:9px;font-weight:700;color:rgba(240,232,220,.4);letter-spacing:.08em;text-transform:uppercase}
+.slots-wrap{flex-shrink:0;background:#0D0A08;border-bottom:1px solid rgba(160,50,30,.12)}
+.slots-scroll{display:flex;overflow-x:auto;padding:8px 16px;gap:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.slots-scroll::-webkit-scrollbar{display:none}
+.slotbtn{flex:0 0 auto;padding:6px 10px;border-radius:8px;border:1px solid rgba(160,50,30,.15);cursor:pointer;font-size:12px;font-weight:600;background:rgba(160,50,30,.05);color:rgba(240,232,220,.35);transition:all .2s;white-space:nowrap;font-family:"DM Sans",sans-serif}
+.slotbtn.on{background:#8B1A1A;border-color:#A03020;color:#F0E8DC;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E")}
+.slotbtn.full{background:rgba(196,64,64,.1);border-color:rgba(196,64,64,.3);color:rgba(196,64,64,.6)}
+.slot-info{display:flex;align-items:center;justify-content:space-between;padding:4px 20px 6px;background:#0D0A08}
+.slot-pax{font-size:10px;color:rgba(240,232,220,.35);font-weight:500}
+.slot-pax.warn{color:#F5A623}
+.slot-pax.full{color:#C44040}
+.rt{display:flex;border-bottom:1px solid rgba(160,50,30,.12);flex-shrink:0;background:#141009;overflow-x:auto}
+.rbt{flex:0 0 auto;padding:10px 13px;font-size:10px;font-weight:700;background:none;border:none;cursor:pointer;color:rgba(240,232,220,.22);border-bottom:2px solid transparent;margin-bottom:-1px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;transition:all .2s}
+.rbt.on{color:#F0E8DC;border-bottom-color:#8B1A1A}
+.lg{display:flex;gap:12px;align-items:center;padding:6px 20px;flex-shrink:0}
+.li{display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(240,232,220,.35);font-weight:500}
+.ld{width:10px;height:10px;border-radius:3px}
+.fw{flex:1;overflow:hidden;padding:8px 14px 12px;min-height:0}
+.fp{width:100%;height:100%;border-radius:14px;overflow:hidden;box-shadow:inset 0 0 40px rgba(0,0,0,.4),inset 0 0 0 6px rgba(160,50,30,.06)}
+.ov{position:fixed;inset:0;background:rgba(13,10,8,.9);display:flex;align-items:flex-end;z-index:200;backdrop-filter:blur(10px)}
+.sh{background:#1A120C;border-top:1px solid rgba(160,50,30,.25);border-radius:24px 24px 0 0;padding:24px 24px 44px;width:100%;max-width:430px;margin:0 auto;animation:up .25s ease;max-height:90vh;overflow-y:auto}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sh-ey{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,232,220,.3);margin-bottom:4px}
+.sh-ti{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:300;color:#F0E8DC;margin-bottom:4px}
+.sh-ba{display:inline-flex;align-items:center;background:#8B1A1A;border-radius:20px;padding:3px 13px;font-size:11px;font-weight:600;color:#F0E8DC;margin-bottom:8px}
+.sh-px{font-size:12px;color:rgba(240,232,220,.35);margin-bottom:10px;display:block}
+.warn-dur{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:rgba(245,166,35,.8);line-height:1.5}
+.contact-note{display:flex;align-items:center;gap:8px;background:rgba(160,50,30,.08);border:1px solid rgba(160,50,30,.2);border-radius:10px;padding:10px 14px;margin-bottom:14px}
+.contact-note p{font-size:12px;color:rgba(240,232,220,.45);line-height:1.5}
+.contact-note a{color:rgba(212,175,100,.7);font-weight:600;text-decoration:none}
+.sg-note{font-size:12px;color:rgba(240,232,220,.35);margin-bottom:14px;padding:10px 12px;border-radius:8px;background:rgba(240,232,220,.03);border-left:2px solid rgba(240,232,220,.12);line-height:1.5;font-style:italic}
+.err{background:rgba(196,64,64,.1);border:1px solid rgba(196,64,64,.3);border-radius:10px;padding:10px 14px;margin-top:4px;margin-bottom:8px;font-size:13px;color:#C44040;font-weight:600}
+.fl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,232,220,.3);margin-bottom:6px;display:block}
+.fi{width:100%;padding:12px 14px;border:1px solid rgba(240,232,220,.08);border-radius:11px;font-size:14px;color:#F0E8DC;background:rgba(240,232,220,.04);outline:none;margin-bottom:14px;font-family:"DM Sans",sans-serif}
+.fi:focus{border-color:#8B1A1A}.fi::placeholder{color:rgba(240,232,220,.18)}.fi.er{border-color:#C44040;margin-bottom:4px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bbk{width:100%;padding:15px;background:#8B1A1A;color:#F0E8DC;border:none;border-radius:13px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;font-family:"DM Sans",sans-serif;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E")}
+.bbk:disabled{opacity:.35;cursor:not-allowed}
+.bfr{width:100%;padding:13px;background:rgba(196,64,64,.1);color:#C44040;border:1px solid rgba(196,64,64,.2);border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;font-family:"DM Sans",sans-serif}
+.bca{width:100%;padding:12px;background:transparent;color:rgba(240,232,220,.3);border:1px solid rgba(240,232,220,.08);border-radius:13px;font-size:13px;cursor:pointer;margin-top:8px;font-family:"DM Sans",sans-serif}
+.bi{background:rgba(240,232,220,.03);border:1px solid rgba(240,232,220,.07);border-radius:12px;padding:14px;margin-bottom:16px}
+.bir{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid rgba(240,232,220,.05)}.bir:last-child{border-bottom:none}
+.bik{color:rgba(240,232,220,.3);font-weight:500}.biv{color:#F0E8DC;font-weight:600}
+.pm{background:rgba(240,232,220,.03);border:1px solid rgba(240,232,220,.07);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px}
+.pin-ov{position:fixed;inset:0;background:rgba(13,10,8,.96);display:flex;align-items:center;justify-content:center;z-index:300;backdrop-filter:blur(14px)}
+.pin-sh{background:#1A120C;border:1px solid rgba(160,50,30,.25);border-radius:24px;padding:36px 28px;width:300px;text-align:center}
+.pin-ti{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:300;color:#F0E8DC;margin-bottom:6px}
+.pin-su{font-size:12px;color:rgba(240,232,220,.3);margin-bottom:28px;line-height:1.5}
+.pin-in{width:100%;padding:14px;border:1px solid rgba(240,232,220,.1);border-radius:12px;font-size:22px;color:#F0E8DC;background:rgba(240,232,220,.05);outline:none;text-align:center;letter-spacing:.3em;margin-bottom:8px;font-family:"DM Sans",sans-serif}
+.pin-in:focus{border-color:#8B1A1A}.pin-er{font-size:12px;color:#C44040;margin-bottom:12px;min-height:18px}
+.pin-bt{width:100%;padding:13px;background:#8B1A1A;color:#F0E8DC;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif}
+.pin-ca{width:100%;padding:11px;background:transparent;color:rgba(240,232,220,.3);border:1px solid rgba(240,232,220,.08);border-radius:12px;font-size:13px;cursor:pointer;margin-top:8px;font-family:"DM Sans",sans-serif}
+.cal-ov{position:fixed;inset:0;background:rgba(13,10,8,.9);display:flex;align-items:flex-end;z-index:250;backdrop-filter:blur(10px)}
+.cal-sh{background:#1A120C;border-top:1px solid rgba(160,50,30,.25);border-radius:24px 24px 0 0;padding:20px 20px 44px;width:100%;max-width:430px;margin:0 auto;animation:up .25s ease}
+.cal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-mn{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:400;color:#F0E8DC;text-transform:capitalize}
+.cal-nb{width:30px;height:30px;border:1px solid rgba(160,50,30,.25);border-radius:8px;background:transparent;cursor:pointer;color:rgba(240,232,220,.5);font-size:16px;display:flex;align-items:center;justify-content:center}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px}
+.cal-dn{text-align:center;font-size:9px;font-weight:700;letter-spacing:.06em;color:rgba(240,232,220,.25);text-transform:uppercase;padding-bottom:4px}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:rgba(240,232,220,.5);transition:all .15s;border:1px solid transparent}
+.cal-day:hover{background:rgba(160,50,30,.15);color:#F0E8DC}.cal-day.today{background:rgba(139,26,26,.3);border-color:rgba(139,26,26,.5);color:#F0E8DC;font-weight:700}
+.cal-day.sel{background:#8B1A1A;color:#F0E8DC;font-weight:700}.cal-day.empty{cursor:default;pointer-events:none}
+.cal-close{width:100%;padding:12px;background:transparent;color:rgba(240,232,220,.3);border:1px solid rgba(240,232,220,.08);border-radius:13px;font-size:13px;cursor:pointer;margin-top:12px}
+.rep-ov{position:fixed;inset:0;background:rgba(13,10,8,.95);display:flex;flex-direction:column;z-index:300;backdrop-filter:blur(14px);overflow-y:auto}
+.rep-hd{display:flex;align-items:center;justify-content:space-between;padding:48px 24px 20px;background:#0D0A08;border-bottom:1px solid rgba(160,50,30,.2);flex-shrink:0}
+.rep-title{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:300;color:#F0E8DC}
+.rep-sub{font-size:11px;color:rgba(240,232,220,.35);margin-top:3px}
+.rep-actions{display:flex;gap:8px;align-items:center}
+.rep-close{width:32px;height:32px;border:1px solid rgba(160,50,30,.3);border-radius:8px;background:transparent;cursor:pointer;color:rgba(240,232,220,.5);font-size:16px;display:flex;align-items:center;justify-content:center}
+.rep-print{padding:6px 14px;background:#8B1A1A;border:none;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;color:#F0E8DC;letter-spacing:.06em;text-transform:uppercase}
+.rep-body{padding:16px 20px 40px;flex:1}.rep-slot{margin-bottom:24px}
+.rep-slot-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(160,50,30,.2)}
+.rep-slot-time{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:400;color:#F0E8DC}
+.rep-slot-count{margin-left:auto;font-size:11px;color:rgba(240,232,220,.35);font-weight:600}
+.rep-sala-hd{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(160,50,30,.6);margin:8px 0 5px}
+.rep-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(240,232,220,.03);border:1px solid rgba(240,232,220,.06);border-radius:9px;margin-bottom:4px}
+.rep-tnum{font-family:"Cormorant Garamond",serif;font-size:16px;font-weight:400;color:#F0E8DC;min-width:36px}
+.rep-info{flex:1}.rep-nome{font-size:13px;font-weight:600;color:#F0E8DC}.rep-detail{font-size:11px;color:rgba(240,232,220,.4);margin-top:1px}
+.rep-pax{background:#8B1A1A;color:#F0E8DC;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px}
+.rep-empty{text-align:center;padding:12px;font-size:13px;color:rgba(240,232,220,.2);font-style:italic}
+@media print{.rep-actions,.adminbtn{display:none}.rep-ov{position:relative;background:white}.rep-title,.rep-slot-time{color:#1A0A06}.rep-sub,.rep-slot-count,.rep-sala-hd{color:#666}.rep-slot-hd{border-bottom-color:#ccc}.rep-row{background:#f9f9f9;border-color:#ddd}.rep-nome{color:#1A0A06}.rep-detail{color:#666}.rep-tnum,.rep-pax{color:#8B1A1A}.rep-pax{background:transparent;border:1px solid #8B1A1A}body{background:white}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<script type="text/babel">
+const {useState,useRef,useEffect}=React;
+const ADMIN_PIN="1234";
+const NOMI={"plateatico":"Plateatico","interna":"Sala Interna","cucina":"Sala Cucina","prive":"Sala Prive"};
+const SITTING=120;
+const MAX_PPL=20;
+const SALE_IDS=["plateatico","interna","cucina","prive"];
+const LABELS={"B1":"104","B2":"105","B3":"106"};
+const TABLES_BY_SALA={"plateatico":["209","205","207","201","210","204","208"],"interna":["11","12","13","14","15","16","17","18","1","2","3","4","B1","B2","B3"],"cucina":["21","22","23","24","25","31","32"],"prive":["47","49","50","54","51","52"]};
+
+const ALL_SLOTS=(()=>{
+  const s=[];
+  for(let h=17;h<=22;h++){
+    for(let m=0;m<60;m+=15){
+      if(h===22&&m>0)break;
+      if(h===17&&m<30)continue;
+      s.push((h<10?"0"+h:h)+":"+(m===0?"00":m<10?"0"+m:m));
+    }
+  }
+  return s;
+})();
+
+function toM(t){const[h,m]=t.split(":").map(Number);return h*60+m;}
+
+function bkKey(sala,num,off,time){return sala+"|"+num+"|"+off+"|"+time;}
+
+function getTableBks(bks,sala,num,off){
+  return Object.keys(bks)
+    .filter(k=>k.startsWith(sala+"|"+num+"|"+off+"|"))
+    .map(k=>{const t=k.split("|")[3];return{time:t,...bks[k]};})
+    .sort((a,b)=>toM(a.time)-toM(b.time));
+}
+
+function isOccupiedAt(bks,sala,num,off,viewTime){
+  const vm=toM(viewTime);
+  return getTableBks(bks,sala,num,off).some(bk=>{const bm=toM(bk.time);return vm>=bm&&vm<bm+SITTING;});
+}
+
+function getActiveBk(bks,sala,num,off,viewTime){
+  const vm=toM(viewTime);
+  return getTableBks(bks,sala,num,off).find(bk=>{const bm=toM(bk.time);return vm>=bm&&vm<bm+SITTING;});
+}
+
+function getBookingStartTime(bks,sala,num,off,viewTime){
+  const vm=toM(viewTime);
+  const bk=getTableBks(bks,sala,num,off).find(b=>{const bm=toM(b.time);return vm>=bm&&vm<bm+SITTING;});
+  return bk?bk.time:null;
+}
+
+function checkBooking(bks,sala,num,off,newTime){
+  const nm=toM(newTime);
+  const existing=getTableBks(bks,sala,num,off);
+  if(existing.some(bk=>{const bm=toM(bk.time);return nm>=bm&&nm<bm+SITTING;})){return{ok:false,warning:null};}
+  let warning=null;
+  for(const bk of existing){
+    const bm=toM(bk.time);
+    if(bm>nm&&bm<nm+SITTING){
+      const avail=bm-nm;
+      const h=Math.floor(avail/60);const m=avail%60;
+      warning="Attenzione: avrai solo "+(h>0?h+"h ":"")+(m>0?m+" min ":"")+"a questo tavolo (prossima prenotazione alle "+bk.time+").";
+    }
+  }
+  return{ok:true,warning};
+}
+
+function countPplInSlot(bks,off,viewTime){
+  const vm=toM(viewTime);
+  let tot=0;
+  Object.keys(bks).forEach(k=>{
+    const p=k.split("|");
+    if(p.length===4&&p[2]===String(off)){
+      const bm=toM(p[3]);
+      if(vm>=bm&&vm<bm+SITTING)tot+=(parseInt(bks[k].persone)||0);
+    }
+  });
+  return tot;
+}
+
+function isTodayClosed(off){
+  if(off!==0)return false;
+  const n=new Date();return n.getHours()>=20;
+}
+
+
+function FP_Plateatico(props){
+  return(
+    <svg viewBox="0 0 380 340" width="100%" height="100%" style={{display:"block"}}>
+      <rect width="380" height="340" fill="#180E08" rx="12"/>
+      <rect x="1" y="1" width="378" height="338" rx="11" fill="none" stroke="rgba(160,50,30,.18)" strokeWidth="1.5"/>
+{(()=>{
+  const occupied=props.isOcc("plateatico","209");
+  const bk=props.getBk("plateatico","209");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("209",occupied,bk,{num:"209",pax:4,sg:false,label:"209"})} >
+      <rect x="54.0" y="26.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(0.0,60.0,34.0)"/>
+      <rect x="100.0" y="72.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(90.0,106.0,80.0)"/>
+      <rect x="54.0" y="118.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(180.0,60.0,126.0)"/>
+      <rect x="8.0" y="72.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(270.0,14.0,80.0)"/>
+      <circle cx="60" cy="80" r="30" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="60" y="77" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">209</text>
+      <text x="60" y="90" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="60" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="60" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("plateatico","205");
+  const bk=props.getBk("plateatico","205");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("205",occupied,bk,{num:"205",pax:4,sg:false,label:"205"})} >
+      <rect x="164.3" y="37.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="183.7" y="37.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="164.3" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="183.7" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="151" y="57" width="58" height="38" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="180" y="73" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">205</text>
+      <text x="180" y="86" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="180" y="99" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="180" y="99" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("plateatico","207");
+  const bk=props.getBk("plateatico","207");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("207",occupied,bk,{num:"207",pax:6,sg:false,label:"207"})} >
+      <rect x="285.0" y="34.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="312.0" y="34.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="339.0" y="34.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="285.0" y="100.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="312.0" y="100.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="339.0" y="100.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="264" y="54" width="108" height="38" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="318" y="70" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">207</text>
+      <text x="318" y="83" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">6px</text>
+      {bk&&isA&&<text x="318" y="96" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="318" y="96" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("plateatico","201");
+  const bk=props.getBk("plateatico","201");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("201",occupied,bk,{num:"201",pax:4,sg:false,label:"201"})} >
+      <rect x="54.0" y="151.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(0.0,60.0,159.0)"/>
+      <rect x="100.0" y="197.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(90.0,106.0,205.0)"/>
+      <rect x="54.0" y="243.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(180.0,60.0,251.0)"/>
+      <rect x="8.0" y="197.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(270.0,14.0,205.0)"/>
+      <circle cx="60" cy="205" r="30" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="60" y="202" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">201</text>
+      <text x="60" y="215" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="60" y="228" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="60" y="228" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("plateatico","210");
+  const bk=props.getBk("plateatico","210");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("210",occupied,bk,{num:"210",pax:4,sg:false,label:"210"})} >
+      <rect x="186.0" y="151.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(0.0,192.0,159.0)"/>
+      <rect x="232.0" y="197.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(90.0,238.0,205.0)"/>
+      <rect x="186.0" y="243.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(180.0,192.0,251.0)"/>
+      <rect x="140.0" y="197.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(270.0,146.0,205.0)"/>
+      <circle cx="192" cy="205" r="30" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="192" y="202" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">210</text>
+      <text x="192" y="215" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="192" y="228" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="192" y="228" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("plateatico","204");
+  const bk=props.getBk("plateatico","204");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("204",occupied,bk,{num:"204",pax:2,sg:false,label:"204"})} >
+      <rect x="294.0" y="162.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="294.0" y="226.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="275" y="182" width="50" height="36" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="300" y="197" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">204</text>
+      <text x="300" y="210" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="300" y="223" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="300" y="223" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("plateatico","208");
+  const bk=props.getBk("plateatico","208");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("208",occupied,bk,{num:"208",pax:2,sg:false,label:"208"})} >
+      <rect x="352.0" y="162.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="352.0" y="226.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="333" y="182" width="50" height="36" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="358" y="197" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">208</text>
+      <text x="358" y="210" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="358" y="223" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="358" y="223" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+<g><rect x="2" y="280" width="165" height="46" rx="10" fill="rgba(100,30,15,.35)" stroke="rgba(160,50,30,.4)" strokeWidth="1.5"/><text x="84" y="303" textAnchor="middle" dominantBaseline="middle" fontSize="10" fill="rgba(240,232,220,.35)" fontFamily="Cormorant Garamond,serif" fontStyle="italic">Divano</text></g>
+    </svg>
+  );
+}
+
+function FP_Interna(props){
+  return(
+    <svg viewBox="0 0 380 430" width="100%" height="100%" style={{display:"block"}}>
+      <rect width="380" height="430" fill="#180E08" rx="12"/>
+      <rect x="1" y="1" width="378" height="428" rx="11" fill="none" stroke="rgba(160,50,30,.18)" strokeWidth="1.5"/>
+      <rect x="10" y="8" width="360" height="5" rx="2" fill="rgba(160,50,30,.22)"/>
+      <rect x="10" y="415" width="360" height="5" rx="2" fill="rgba(160,50,30,.22)"/>
+{(()=>{
+  const occupied=props.isOcc("interna","11");
+  const bk=props.getBk("interna","11");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("11",occupied,bk,{num:"11",pax:2,sg:false,label:"11"})} >
+      <rect x="11" y="42" width="42" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="26.0" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="14" y="65" width="36" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="32" y="77" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">11</text>
+      <text x="32" y="90" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="32" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="32" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","12");
+  const bk=props.getBk("interna","12");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("12",occupied,bk,{num:"12",pax:4,sg:false,label:"12"})} >
+      <rect x="52" y="42" width="56" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="65.7" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="82.3" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="55" y="65" width="50" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="80" y="77" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">12</text>
+      <text x="80" y="90" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="80" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="80" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","13");
+  const bk=props.getBk("interna","13");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("13",occupied,bk,{num:"13",pax:2,sg:false,label:"13"})} >
+      <rect x="107" y="42" width="42" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="122.0" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="110" y="65" width="36" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="128" y="77" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">13</text>
+      <text x="128" y="90" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="128" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="128" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","14");
+  const bk=props.getBk("interna","14");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("14",occupied,bk,{num:"14",pax:4,sg:false,label:"14"})} >
+      <rect x="148" y="42" width="56" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="161.7" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="178.3" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="151" y="65" width="50" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="176" y="77" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">14</text>
+      <text x="176" y="90" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="176" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="176" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","15");
+  const bk=props.getBk("interna","15");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("15",occupied,bk,{num:"15",pax:2,sg:false,label:"15"})} >
+      <rect x="203" y="42" width="42" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="218.0" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="206" y="65" width="36" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="224" y="77" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">15</text>
+      <text x="224" y="90" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="224" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="224" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","16");
+  const bk=props.getBk("interna","16");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("16",occupied,bk,{num:"16",pax:2,sg:false,label:"16"})} >
+      <rect x="244" y="42" width="42" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="259.0" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="247" y="65" width="36" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="265" y="77" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">16</text>
+      <text x="265" y="90" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="265" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="265" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","17");
+  const bk=props.getBk("interna","17");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("17",occupied,bk,{num:"17",pax:2,sg:false,label:"17"})} >
+      <rect x="285" y="42" width="42" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="300.0" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="288" y="65" width="36" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="306" y="77" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">17</text>
+      <text x="306" y="90" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="306" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="306" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","18");
+  const bk=props.getBk("interna","18");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("18",occupied,bk,{num:"18",pax:6,sg:false,label:"18"})} >
+      <rect x="326" y="42" width="70" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="339.0" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="355.0" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="371.0" y="103.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="329" y="65" width="64" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="361" y="77" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">18</text>
+      <text x="361" y="90" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">6px</text>
+      {bk&&isA&&<text x="361" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="361" y="103" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","1");
+  const bk=props.getBk("interna","1");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("1",occupied,bk,{num:"1",pax:4,sg:false,label:"1"})} >
+      <rect x="75" y="174" width="62" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="90.7" y="241.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="109.3" y="241.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="78" y="197" width="56" height="36" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="106" y="212" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">1</text>
+      <text x="106" y="225" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="106" y="238" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="106" y="238" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","2");
+  const bk=props.getBk("interna","2");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("2",occupied,bk,{num:"2",pax:2,sg:false,label:"2"})} >
+      <rect x="145" y="174" width="48" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="163.0" y="241.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="148" y="197" width="42" height="36" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="169" y="212" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">2</text>
+      <text x="169" y="225" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="169" y="238" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="169" y="238" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","3");
+  const bk=props.getBk("interna","3");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("3",occupied,bk,{num:"3",pax:2,sg:false,label:"3"})} >
+      <rect x="201" y="174" width="48" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="219.0" y="241.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="204" y="197" width="42" height="36" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="225" y="212" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">3</text>
+      <text x="225" y="225" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="225" y="238" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="225" y="238" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","4");
+  const bk=props.getBk("interna","4");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("4",occupied,bk,{num:"4",pax:2,sg:false,label:"4"})} >
+      <rect x="257" y="174" width="48" height="19" rx="6" fill="{BF}" stroke="{BS}" strokeWidth="1.5"/>
+      <rect x="275.0" y="241.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="260" y="197" width="42" height="36" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="281" y="212" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">4</text>
+      <text x="281" y="225" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="281" y="238" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="281" y="238" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","B1");
+  const bk=props.getBk("interna","B1");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("B1",occupied,bk,{num:"B1",pax:4,sg:true,label:"104"})} >
+      <circle cx="56.7" cy="342.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="91.3" cy="342.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="22" y="355" width="104" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="74" y="367" textAnchor="middle" dominantBaseline="middle" fontSize="13" fill="{NF}" fontFamily="Cormorant Garamond,serif">104</text>
+      <text x="74" y="380" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="74" y="393" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="74" y="393" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","B2");
+  const bk=props.getBk("interna","B2");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("B2",occupied,bk,{num:"B2",pax:4,sg:true,label:"105"})} >
+      <circle cx="166.7" cy="342.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="201.3" cy="342.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="132" y="355" width="104" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="184" y="367" textAnchor="middle" dominantBaseline="middle" fontSize="13" fill="{NF}" fontFamily="Cormorant Garamond,serif">105</text>
+      <text x="184" y="380" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="184" y="393" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="184" y="393" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("interna","B3");
+  const bk=props.getBk("interna","B3");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("B3",occupied,bk,{num:"B3",pax:4,sg:true,label:"106"})} >
+      <circle cx="276.7" cy="342.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="311.3" cy="342.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="242" y="355" width="104" height="30" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="294" y="367" textAnchor="middle" dominantBaseline="middle" fontSize="13" fill="{NF}" fontFamily="Cormorant Garamond,serif">106</text>
+      <text x="294" y="380" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="294" y="393" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="294" y="393" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+    </svg>
+  );
+}
+
+function FP_Cucina(props){
+  return(
+    <svg viewBox="0 0 380 390" width="100%" height="100%" style={{display:"block"}}>
+      <rect width="380" height="390" fill="#180E08" rx="12"/>
+      <rect x="1" y="1" width="378" height="388" rx="11" fill="none" stroke="rgba(160,50,30,.18)" strokeWidth="1.5"/>
+      <text x="190" y="200" textAnchor="middle" fontSize="11" fontStyle="italic" fill="rgba(160,50,30,.12)" fontFamily="Cormorant Garamond,serif">cucina a vista</text>
+{(()=>{
+  const occupied=props.isOcc("cucina","21");
+  const bk=props.getBk("cucina","21");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("21",occupied,bk,{num:"21",pax:4,sg:true,label:"21"})} >
+      <circle cx="38.0" cy="56.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="58.0" cy="56.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="38.0" cy="118.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="58.0" cy="118.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="18" y="69" width="60" height="38" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="48" y="85" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">21</text>
+      <text x="48" y="98" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="48" y="111" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="48" y="111" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("cucina","22");
+  const bk=props.getBk("cucina","22");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("22",occupied,bk,{num:"22",pax:4,sg:true,label:"22"})} >
+      <circle cx="108.0" cy="56.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="128.0" cy="56.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="108.0" cy="118.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="128.0" cy="118.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="88" y="69" width="60" height="38" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="118" y="85" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">22</text>
+      <text x="118" y="98" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="118" y="111" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="118" y="111" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("cucina","23");
+  const bk=props.getBk("cucina","23");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("23",occupied,bk,{num:"23",pax:4,sg:true,label:"23"})} >
+      <circle cx="178.0" cy="56.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="198.0" cy="56.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="178.0" cy="118.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="198.0" cy="118.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="158" y="69" width="60" height="38" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="188" y="85" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">23</text>
+      <text x="188" y="98" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="188" y="111" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="188" y="111" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("cucina","24");
+  const bk=props.getBk("cucina","24");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("24",occupied,bk,{num:"24",pax:4,sg:true,label:"24"})} >
+      <circle cx="248.0" cy="56.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="268.0" cy="56.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="248.0" cy="118.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="268.0" cy="118.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="228" y="69" width="60" height="38" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="258" y="85" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">24</text>
+      <text x="258" y="98" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="258" y="111" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="258" y="111" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("cucina","25");
+  const bk=props.getBk("cucina","25");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("25",occupied,bk,{num:"25",pax:4,sg:true,label:"25"})} >
+      <circle cx="318.0" cy="56.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="338.0" cy="56.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="318.0" cy="118.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <circle cx="338.0" cy="118.0" r="7" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="298" y="69" width="60" height="38" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="328" y="85" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">25</text>
+      <text x="328" y="98" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="328" y="111" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="328" y="111" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("cucina","31");
+  const bk=props.getBk("cucina","31");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("31",occupied,bk,{num:"31",pax:6,sg:false,label:"31"})} >
+      <rect x="84.0" y="249.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="112.0" y="249.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="140.0" y="249.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="84.0" y="329.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="112.0" y="329.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="140.0" y="329.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="62" y="269" width="112" height="52" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="118" y="292" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">31</text>
+      <text x="118" y="305" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">6px</text>
+      {bk&&isA&&<text x="118" y="318" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="118" y="318" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("cucina","32");
+  const bk=props.getBk("cucina","32");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("32",occupied,bk,{num:"32",pax:6,sg:false,label:"32"})} >
+      <rect x="218.0" y="249.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="246.0" y="249.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="274.0" y="249.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="218.0" y="329.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="246.0" y="329.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="274.0" y="329.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="196" y="269" width="112" height="52" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="252" y="292" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">32</text>
+      <text x="252" y="305" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">6px</text>
+      {bk&&isA&&<text x="252" y="318" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="252" y="318" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+    </svg>
+  );
+}
+
+function FP_Prive(props){
+  return(
+    <svg viewBox="0 0 380 380" width="100%" height="100%" style={{display:"block"}}>
+      <rect width="380" height="380" fill="#180E08" rx="12"/>
+      <rect x="1" y="1" width="378" height="378" rx="11" fill="none" stroke="rgba(160,50,30,.18)" strokeWidth="1.5"/>
+{(()=>{
+  const occupied=props.isOcc("prive","47");
+  const bk=props.getBk("prive","47");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("47",occupied,bk,{num:"47",pax:2,sg:false,label:"47"})} >
+      <rect x="68.0" y="40.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="68.0" y="104.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="46" y="60" width="56" height="36" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="74" y="75" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">47</text>
+      <text x="74" y="88" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="74" y="101" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="74" y="101" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("prive","49");
+  const bk=props.getBk("prive","49");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("49",occupied,bk,{num:"49",pax:2,sg:false,label:"49"})} >
+      <rect x="194.0" y="40.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="194.0" y="104.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="172" y="60" width="56" height="36" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="200" y="75" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">49</text>
+      <text x="200" y="88" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="200" y="101" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="200" y="101" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("prive","50");
+  const bk=props.getBk("prive","50");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("50",occupied,bk,{num:"50",pax:4,sg:false,label:"50"})} >
+      <rect x="316.0" y="36.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(0.0,322.0,44.0)"/>
+      <rect x="364.0" y="84.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(90.0,370.0,92.0)"/>
+      <rect x="316.0" y="132.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(180.0,322.0,140.0)"/>
+      <rect x="268.0" y="84.0" width="13" height="14" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2" transform="rotate(270.0,274.0,92.0)"/>
+      <circle cx="322" cy="92" r="32" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="322" y="89" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">50</text>
+      <text x="322" y="102" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">4px</text>
+      {bk&&isA&&<text x="322" y="115" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="322" y="115" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("prive","54");
+  const bk=props.getBk("prive","54");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("54",occupied,bk,{num:"54",pax:6,sg:false,label:"54"})} >
+      <rect x="132.7" y="195.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="151.3" y="195.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="132.7" y="323.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="151.3" y="323.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="104" y="231" width="12" height="13" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="180" y="231" width="12" height="13" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="104" y="259" width="12" height="13" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="180" y="259" width="12" height="13" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="104" y="287" width="12" height="13" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="180" y="287" width="12" height="13" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="120" y="215" width="56" height="100" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="148" y="262" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">54</text>
+      <text x="148" y="275" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">6px</text>
+      {bk&&isA&&<text x="148" y="288" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="148" y="288" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("prive","51");
+  const bk=props.getBk("prive","51");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("51",occupied,bk,{num:"51",pax:2,sg:false,label:"51"})} >
+      <rect x="292.0" y="185.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="292.0" y="247.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="271" y="205" width="54" height="34" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="298" y="219" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">51</text>
+      <text x="298" y="232" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="298" y="245" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="298" y="245" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+{(()=>{
+  const occupied=props.isOcc("prive","52");
+  const bk=props.getBk("prive","52");
+  const isA=props.isA;
+  const TF=occupied?"#8B1A1A":"#221510";
+  const TS=occupied?"#A03020":"rgba(240,232,220,.12)";
+  const NF=occupied?"#F0E8DC":"rgba(240,232,220,.6)";
+  const CF=occupied?"rgba(139,26,26,.35)":"rgba(240,232,220,.1)";
+  const CS=occupied?"rgba(160,50,30,.4)":"rgba(240,232,220,.18)";
+  const BF="rgba(100,30,15,.45)";const BS="rgba(160,50,30,.5)";
+  return(
+    <g style={{cursor:"pointer"}} onClick={()=>props.onOpen("52",occupied,bk,{num:"52",pax:2,sg:false,label:"52"})} >
+      <rect x="292.0" y="255.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="292.0" y="317.0" width="13" height="12" rx="3" fill="{CF}" stroke="{CS}" strokeWidth="1.2"/>
+      <rect x="271" y="275" width="54" height="34" rx="5" fill="{TF}" stroke="{TS}" strokeWidth="1.5"/>
+      <text x="298" y="289" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="{NF}" fontFamily="Cormorant Garamond,serif">52</text>
+      <text x="298" y="302" textAnchor="middle" dominantBaseline="middle" fontSize="7" fill="{NF}" opacity="0.45">2px</text>
+      {bk&&isA&&<text x="298" y="315" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.85)">{bk.nome.split(" ")[0]}</text>}
+      {bk&&!isA&&<text x="298" y="315" textAnchor="middle" fontSize="7" fill="rgba(240,232,220,.3)" fontStyle="italic">riservato</text>}
+    </g>
+  );
+})()}
+    </svg>
+  );
+}
+
+function FloorComp({sala,bks,off,slot,isA,onOpen}){
+  const isOcc=(sid,num)=>isOccupiedAt(bks,sid,num,off,slot);
+  const getBk=(sid,num)=>getActiveBk(bks,sid,num,off,slot);
+  const fp={"plateatico":FP_Plateatico,"interna":FP_Interna,"cucina":FP_Cucina,"prive":FP_Prive};
+  const C=fp[sala]||FP_Plateatico;
+  return <C isOcc={isOcc} getBk={getBk} isA={isA} onOpen={onOpen}/>;
+}
+
+function App(){
+  const [sala,setSala]=useState("plateatico");
+  const [off,setOff]=useState(0);
+  const [slot,setSlot]=useState("19:30");
+  const [modal,setModal]=useState(null);
+  const [bks,setBks]=useState({});
+  const [form,setForm]=useState({nome:"",tel:"",persone:"",note:""});
+  const [paxErr,setPaxErr]=useState(false);
+  const [isAdmin,setIsAdmin]=useState(false);
+  const [showPin,setShowPin]=useState(false);
+  const [pin,setPin]=useState("");
+  const [pinErr,setPinErr]=useState("");
+  const [showCal,setShowCal]=useState(false);
+  const [calMonth,setCalMonth]=useState(()=>{const d=new Date();return{y:d.getFullYear(),m:d.getMonth()};});
+  const [showReport,setShowReport]=useState(false);
+  const pinRef=useRef();
+  const slotRef=useRef();
+
+  const today=new Date().toLocaleDateString("it-IT",{weekday:"short",day:"numeric",month:"short"});
+
+  function dlbl(o){
+    const d=new Date();d.setDate(d.getDate()+o);
+    const s=d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"});
+    return o===0?"Oggi  "+s:o===1?"Domani  "+s:s;
+  }
+
+  useEffect(()=>{
+    if(slotRef.current){
+      const el=slotRef.current.querySelector(".slotbtn.on");
+      if(el)el.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
+    }
+  },[slot]);
+
+  const openTable=(num,occupied,bk,tbl)=>{
+    const check=occupied?null:checkBooking(bks,sala,num,off,slot);
+    setModal({num,occupied,bk,salaId:sala,tbl,check});
+    setForm({nome:"",tel:"",persone:"",note:""});
+    setPaxErr(false);
+  };
+
+  const chPers=(v)=>{
+    setForm(p=>({...p,persone:v}));
+    setPaxErr(modal&&v&&parseInt(v)>modal.tbl.pax);
+  };
+
+  const book=()=>{
+    if(!form.nome.trim()||paxErr||!form.persone)return;
+    const totalNow=countPplInSlot(bks,off,slot);
+    if(totalNow+(parseInt(form.persone)||0)>MAX_PPL){alert("Limite di "+MAX_PPL+" persone per questo orario raggiunto.");return;}
+    setBks(p=>({...p,[bkKey(sala,modal.num,off,slot)]:{nome:form.nome,tel:form.tel,persone:form.persone,note:form.note}}));
+    setModal(null);
+  };
+
+  const libera=()=>{
+    const startTime=getBookingStartTime(bks,modal.salaId,modal.num,off,slot);
+    if(startTime){setBks(p=>{const n={...p};delete n[bkKey(modal.salaId,modal.num,off,startTime)];return n;});}
+    setModal(null);
+  };
+
+  const tryPin=()=>{if(pin===ADMIN_PIN){setIsAdmin(true);setShowPin(false);setPin("");setPinErr("");}else{setPinErr("PIN errato");setPin("");}};
+  const toggleAdmin=()=>{if(isAdmin)setIsAdmin(false);else{setShowPin(true);setTimeout(()=>{if(pinRef.current)pinRef.current.focus();},100);}};
+
+  const curPpl=countPplInSlot(bks,off,slot);
+  const slotFull=curPpl>=MAX_PPL;
+
+  return(
+    <div className="app">
+      <div className="hd">
+        <div className="hd-row">
+          <div><div className="logo-d">D</div><div className="logo-s">Donatelli</div></div>
+          <div className="hd-right">
+            <div className="hdate">{today}</div>
+            <div style={{display:"flex",gap:6}}>
+              {isAdmin&&<button className="adminbtn on" style={{background:"rgba(160,50,30,.3)",borderColor:"rgba(160,50,30,.5)"}} onClick={()=>setShowReport(true)}>Riepilogo</button>}
+              <button className={"adminbtn"+(isAdmin?" on":"")} onClick={toggleAdmin}>{isAdmin?"Admin ON":"Admin"}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="dn">
+        <button className="arw" onClick={()=>setOff(o=>o-1)}>&#8249;</button>
+        <button className="dlbl" onClick={()=>setShowCal(true)}>{dlbl(off)}</button>
+        <button className="tbtn" onClick={()=>setOff(0)}>Oggi</button>
+        <button className="arw" onClick={()=>setOff(o=>o+1)}>&#8250;</button>
+      </div>
+
+      <div className="slots-wrap">
+        <div className="slots-scroll" ref={slotRef}>
+          {ALL_SLOTS.map(s=>{
+            const ppl=countPplInSlot(bks,off,s);
+            const full=ppl>=MAX_PPL;
+            return(
+              <button key={s} className={"slotbtn"+(slot===s?" on":"")+(full?" full":"")} onClick={()=>setSlot(s)}>
+                {s}{ppl>0&&<span style={{fontSize:9,marginLeft:4,opacity:.7}}>{ppl}p</span>}
+              </button>
+            );
+          })}
+        </div>
+        <div className="slot-info">
+          <span className={"slot-pax"+(curPpl>=15?" warn":"")+(slotFull?" full":"")}>
+            {curPpl}/{MAX_PPL} persone prenotate alle {slot}
+          </span>
+          {slotFull&&<span style={{fontSize:10,color:"#C44040",fontWeight:700}}>SLOT PIENO</span>}
+        </div>
+      </div>
+
+      <div className="rt">
+        {SALE_IDS.map(id=><button key={id} className={"rbt"+(sala===id?" on":"")} onClick={()=>setSala(id)}>{NOMI[id]}</button>)}
+      </div>
+
+      <div className="lg">
+        <div className="li"><div className="ld" style={{background:"#221510",border:"1px solid rgba(240,232,220,.15)"}}/>Libero</div>
+        <div className="li"><div className="ld" style={{background:"#8B1A1A"}}/>Prenotato</div>
+        {isAdmin&&<div className="li" style={{marginLeft:"auto",fontSize:9,color:"rgba(240,232,220,.4)",fontStyle:"italic"}}>admin</div>}
+      </div>
+
+      <div className="fw">
+        <FloorComp sala={sala} bks={bks} off={off} slot={slot} isA={isAdmin} onOpen={openTable}/>
+      </div>
+
+      {modal&&(
+        <div className="ov" onClick={()=>setModal(null)}>
+          <div className="sh" onClick={e=>e.stopPropagation()}>
+            <div className="sh-ey">{NOMI[modal.salaId]}</div>
+            <div className="sh-ti">Tavolo {modal.tbl.label||modal.num}</div>
+            <div className="sh-ba">{slot}</div>
+            <span className="sh-px">Capacita massima: {modal.tbl.pax} persone</span>
+            <div className="contact-note"><span style={{fontSize:16}}>Tel</span><p>Per informazioni o cambi orario contattare il <a href="tel:+390453011">045 30 11</a></p></div>
+            {modal.tbl.sg&&<div className="sg-note">Questo tavolo e attrezzato con sgabelli alti. Potrebbe non essere la scelta piu comoda per bambini piccoli o chi preferisce sedie tradizionali.</div>}
+
+            {modal.occupied?(
+              isAdmin&&modal.bk?(
+                <div>
+                  <div className="bi">
+                    <div className="bir"><span className="bik">Cliente</span><span className="biv">{modal.bk.nome}</span></div>
+                    <div className="bir"><span className="bik">Prenotato alle</span><span className="biv">{getBookingStartTime(bks,modal.salaId,modal.num,off,slot)||slot}</span></div>
+                    <div className="bir"><span className="bik">Telefono</span><span className="biv">{modal.bk.tel||"--"}</span></div>
+                    <div className="bir"><span className="bik">Persone</span><span className="biv">{modal.bk.persone||"--"}</span></div>
+                    <div className="bir"><span className="bik">Note</span><span className="biv">{modal.bk.note||"--"}</span></div>
+                  </div>
+                  <button className="bfr" onClick={libera}>Libera tavolo</button>
+                  <button className="bca" onClick={()=>setModal(null)}>Chiudi</button>
+                </div>
+              ):(
+                <div>
+                  <div className="pm"><p style={{fontFamily:"Cormorant Garamond,serif",fontSize:17,color:"rgba(240,232,220,.4)",fontStyle:"italic"}}>Questo tavolo e gia riservato.</p></div>
+                  <button className="bca" onClick={()=>setModal(null)}>Chiudi</button>
+                </div>
+              )
+            ):(
+              isTodayClosed(off)?(
+                <div>
+                  <div style={{background:"rgba(139,26,26,.1)",border:"1px solid rgba(139,26,26,.25)",borderRadius:12,padding:20,textAlign:"center",marginBottom:16}}>
+                    <p style={{fontFamily:"Cormorant Garamond,serif",fontSize:18,color:"#F0E8DC",marginBottom:8}}>Prenotazioni chiuse</p>
+                    <p style={{fontSize:13,color:"rgba(240,232,220,.45)",lineHeight:1.6,marginBottom:14}}>Le prenotazioni online per oggi chiudono alle 20:00.</p>
+                    <a href="tel:+390453011" style={{fontSize:18,fontWeight:700,color:"rgba(212,175,100,.8)",fontFamily:"Cormorant Garamond,serif"}}>045 30 11</a>
+                  </div>
+                  <button className="bca" onClick={()=>setModal(null)}>Chiudi</button>
+                </div>
+              ):slotFull?(
+                <div>
+                  <div style={{background:"rgba(196,64,64,.1)",border:"1px solid rgba(196,64,64,.25)",borderRadius:12,padding:16,textAlign:"center",marginBottom:16}}>
+                    <p style={{fontSize:14,color:"#C44040",fontWeight:600,marginBottom:6}}>Slot pieno</p>
+                    <p style={{fontSize:12,color:"rgba(240,232,220,.4)",lineHeight:1.5}}>Alle {slot} e gia stato raggiunto il limite di {MAX_PPL} persone. Scegli un altro orario.</p>
+                  </div>
+                  <button className="bca" onClick={()=>setModal(null)}>Chiudi</button>
+                </div>
+              ):(
+                <div>
+                  {modal.check&&modal.check.warning&&<div className="warn-dur">! {modal.check.warning}</div>}
+                  <label className="fl">Nome cliente</label>
+                  <input className="fi" placeholder="Es. Rossi Mario" autoFocus value={form.nome} onChange={e=>setForm(p=>({...p,nome:e.target.value}))} onKeyDown={e=>e.key==="Enter"&&book()}/>
+                  <label className="fl">Numero di telefono</label>
+                  <input className="fi" placeholder="Es. 347 1234567" type="tel" value={form.tel} onChange={e=>setForm(p=>({...p,tel:e.target.value}))}/>
+                  <div className="frow">
+                    <div>
+                      <label className="fl">Persone</label>
+                      <input className={"fi"+(paxErr?" er":"")} type="number" placeholder="2" min="1" max={modal.tbl.pax} value={form.persone} onChange={e=>chPers(e.target.value)}/>
+                      {paxErr&&<div className="err">Max {modal.tbl.pax} persone</div>}
+                    </div>
+                    <div>
+                      <label className="fl">Note</label>
+                      <input className="fi" placeholder="Allergie..." value={form.note} onChange={e=>setForm(p=>({...p,note:e.target.value}))}/>
+                    </div>
+                  </div>
+                  <button className="bbk" onClick={book} disabled={!form.nome.trim()||paxErr||!form.persone}>Prenota alle {slot}</button>
+                  <button className="bca" onClick={()=>setModal(null)}>Annulla</button>
+                </div>
+              )
+            )}
+          </div>
+        </div>
+      )}
+
+      {showCal&&(
+        <div className="cal-ov" onClick={()=>setShowCal(false)}>
+          <div className="cal-sh" onClick={e=>e.stopPropagation()}>
+            <div className="cal-hd">
+              <button className="cal-nb" onClick={()=>setCalMonth(p=>p.m===0?{y:p.y-1,m:11}:{y:p.y,m:p.m-1})}>&#8249;</button>
+              <span className="cal-mn">{new Date(calMonth.y,calMonth.m,1).toLocaleDateString("it-IT",{month:"long",year:"numeric"})}</span>
+              <button className="cal-nb" onClick={()=>setCalMonth(p=>p.m===11?{y:p.y+1,m:0}:{y:p.y,m:p.m+1})}>&#8250;</button>
+            </div>
+            <div className="cal-days">
+              {["Lun","Mar","Mer","Gio","Ven","Sab","Dom"].map(d=><div key={d} className="cal-dn">{d}</div>)}
+              {(()=>{
+                const td=new Date();td.setHours(0,0,0,0);
+                const first=new Date(calMonth.y,calMonth.m,1);
+                const startDow=(first.getDay()+6)%7;
+                const days=new Date(calMonth.y,calMonth.m+1,0).getDate();
+                const cells=[];
+                for(let i=0;i<startDow;i++)cells.push(<div key={"e"+i} className="cal-day empty"/>);
+                for(let d=1;d<=days;d++){
+                  const dt=new Date(calMonth.y,calMonth.m,d);
+                  const diff=Math.round((dt-td)/(1000*60*60*24));
+                  cells.push(<div key={d} className={"cal-day"+(dt.getTime()===td.getTime()?" today":"")+(diff===off?" sel":"")} onClick={()=>{setOff(diff);setShowCal(false);}}>{d}</div>);
+                }
+                return cells;
+              })()}
+            </div>
+            <button className="cal-close" onClick={()=>setShowCal(false)}>Chiudi</button>
+          </div>
+        </div>
+      )}
+
+      {showReport&&isAdmin&&(()=>{
+        const td=new Date();td.setHours(0,0,0,0);
+        const tgt=new Date(td);tgt.setDate(td.getDate()+off);
+        const ds=tgt.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+        const bySlot={};
+        Object.keys(bks).forEach(k=>{
+          const[sid,num,dayOff,time]=k.split("|");
+          if(parseInt(dayOff)===off){
+            if(!bySlot[time])bySlot[time]={};
+            if(!bySlot[time][sid])bySlot[time][sid]=[];
+            bySlot[time][sid].push({num,label:LABELS[num]||num,...bks[k]});
+          }
+        });
+        const usedSlots=ALL_SLOTS.filter(s=>bySlot[s]&&Object.keys(bySlot[s]).length>0);
+        return(
+          <div className="rep-ov">
+            <div className="rep-hd">
+              <div><div className="rep-title">Riepilogo</div><div className="rep-sub">{ds}</div></div>
+              <div className="rep-actions">
+                <button className="rep-print" onClick={()=>window.print()}>Stampa PDF</button>
+                <button className="rep-close" onClick={()=>setShowReport(false)}>x</button>
+              </div>
+            </div>
+            <div className="rep-body">
+              {usedSlots.length===0&&<div className="rep-empty" style={{marginTop:40}}>Nessuna prenotazione.</div>}
+              {usedSlots.map(s=>{
+                const ppl=countPplInSlot(bks,off,s);
+                return(
+                  <div key={s} className="rep-slot">
+                    <div className="rep-slot-hd">
+                      <div className="rep-slot-time">{s}</div>
+                      <div className="rep-slot-count">{ppl} ospiti</div>
+                    </div>
+                    {bySlot[s]&&SALE_IDS.filter(sid=>bySlot[s][sid]).map(sid=>(
+                      <div key={sid}>
+                        <div className="rep-sala-hd">{NOMI[sid]}</div>
+                        {bySlot[s][sid].map((bk,i)=>(
+                          <div key={i} className="rep-row">
+                            <div className="rep-tnum">{bk.label}</div>
+                            <div className="rep-info">
+                              <div className="rep-nome">{bk.nome}</div>
+                              <div className="rep-detail">{bk.tel}{bk.note&&bk.note!==""?"  -  "+bk.note:""}</div>
+                            </div>
+                            <div className="rep-pax">{bk.persone}px</div>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
+
+      {showPin&&(
+        <div className="pin-ov" onClick={()=>{setShowPin(false);setPin("");setPinErr("");}}>
+          <div className="pin-sh" onClick={e=>e.stopPropagation()}>
+            <div className="pin-ti">Accesso Admin</div>
+            <div className="pin-su">Inserisci il PIN per visualizzare i dettagli delle prenotazioni</div>
+            <input ref={pinRef} className="pin-in" type="password" maxLength="4" placeholder="****" value={pin} onChange={e=>setPin(e.target.value)} onKeyDown={e=>e.key==="Enter"&&tryPin()}/>
+            <div className="pin-er">{pinErr}</div>
+            <button className="pin-bt" onClick={tryPin}>Conferma</button>
+            <button className="pin-ca" onClick={()=>{setShowPin(false);setPin("");setPinErr("");}}>Annulla</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
